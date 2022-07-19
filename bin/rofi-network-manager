@@ -9,14 +9,15 @@ QRCODE_DIR="/tmp/"
 WIDTH_FIX_MAIN=0
 WIDTH_FIX_STATUS=0
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARE="$DIR/../share"
 PASSWORD_ENTER="if connection is stored, hit enter/esc"
 WIRELESS_INTERFACES=($(nmcli device | awk '$2=="wifi" {print $1}'))
 WIRELESS_INTERFACES_PRODUCT=()
 WLAN_INT=0
 
 function initialization() {
-	source "$DIR/rofi-network-manager.conf" || source "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.conf" || exit
-	{ RASI_DIR="$DIR/rofi-network-manager.rasi" && [[ -f "$DIR/rofi-network-manager.rasi" ]]; } || { RASI_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi" && [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi" ]]; } || exit
+	source "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.conf" || source "$SHARE/rofi-network-manager.conf" || exit
+	{ RASI_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi" && [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/rofi-network-manager.rasi" ]]; } || { RASI_DIR="$SHARE/rofi-network-manager.rasi" && [[ -f "$SHARE/rofi-network-manager.rasi" ]]; } || exit
 	for i in "${WIRELESS_INTERFACES[@]}"; do
 		WIRELESS_INTERFACES_PRODUCT+=("$(nmcli -f general.product device show "$i" | awk '{print $2}')")
 	done
